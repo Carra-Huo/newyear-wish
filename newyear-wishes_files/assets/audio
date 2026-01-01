@@ -1,0 +1,4 @@
+<audio id="bg-music" loop preload="auto">
+    <!-- 先用在线链接测试 -->
+    <source src="https://assets.mixkit.co/music/preview/mixkitsmile-1076.mp3" type="audio/mp3">
+</audio>

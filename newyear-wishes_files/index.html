@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 元旦祝福</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* === 页面通用样式 === */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* === 第一页：收到祝福页面 === */
+        .page-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 2;
+            opacity: 1;
+        }
+        
+        .page-1.hidden {
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .envelope-container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            padding: 40px 20px;
+        }
+        
+        .envelope {
+            font-size: 120px;
+            margin: 30px 0;
+            animation: floatEnvelope 3s infinite ease-in-out;
+        }
+        
+        @keyframes floatEnvelope {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+        
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .open-btn {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+        
+        .open-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .hint {
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.7;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.9; }
+        }
+        
+        /* 飘落的雪花/星星效果 */
+        .falling-item {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.7;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        /* === 第二页：祝福页面 === */
+        .page-2 {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .page-2.show {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 2;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .date {
+            font-size: 1.2em;
+            color: #636e72;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        h1 {
+            color: #d63031;
+            font-size: 2.8em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            background: linear-gradient(45deg, #d63031, #e17055);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .emoji-title {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .year-number {
+            font-size: 5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fd79a8, #e17055, #fdcb6e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+            text-shadow: 0 0 30px rgba(253, 121, 168, 0.3);
+        }
+        
+        .message-box {
+            background: linear-gradient(120deg, rgba(161, 196, 253, 0.1) 0%, rgba(194, 233, 251, 0.1) 100%);
+            border-radius: 20px;
+            padding: 35px 25px;
+            margin: 30px 0;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-box p {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin: 15px 0;
+            color: #2d3436;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+        
+        .message-box p:nth-child(1) { animation-delay: 0.2s; }
+        .message-box p:nth-child(2) { animation-delay: 0.4s; }
+        .message-box p:nth-child(3) { animation-delay: 0.6s; }
+        .message-box p:nth-child(4) { animation-delay: 0.8s; }
+        .message-box p:nth-child(5) { animation-delay: 1.0s; }
+        .message-box p:nth-child(6) { animation-delay: 1.2s; }
+        .message-box p:nth-child(7) { animation-delay: 1.4s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .blessing {
+            font-size: 1.8em;
+            color: #d63031;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .signature {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px dashed #dfe6e9;
+        }
+        
+        .signature p {
+            font-size: 1.2em;
+            color: #636e72;
+            margin: 10px 0;
+        }
+        
+        .final-emoji {
+            font-size: 3em;
+            margin: 20px 0;
+            animation: sparkle 1.5s infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .share-hint {
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #888;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        
+        /* 背景装饰 */
+        .bg-decoration {
+            position: fixed;
+            z-index: 0;
+            font-size: 30px;
+            opacity: 0.2;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #636e72;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .title { font-size: 2em; }
+            .envelope { font-size: 80px; }
+            .open-btn { padding: 15px 30px; font-size: 1.1em; }
+            
+            .container {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+            
+            h1 { font-size: 2.2em; }
+            .emoji-title { font-size: 3em; }
+            .year-number { font-size: 4em; }
+            .message-box p { font-size: 1.1em; }
+            .blessing { font-size: 1.5em; padding: 12px; }
+            .final-emoji { font-size: 2.5em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- === 第一页：收到祝福页面 === -->
+    <div class="page page-1" id="page1">
+        <div class="envelope-container">
+            <h1 class="title">🎁 您收到一份元旦祝福</h1>
+            <p class="subtitle">来自好友的暖心问候</p>
+            
+            <div class="envelope">✉️</div>
+            
+            <button class="open-btn" onclick="openEnvelope()">
+                <span>✨ 打开祝福 ✨</span>
+            </button>
+            
+            <div class="hint">点击上方按钮开启祝福</div>
+        </div>
+    </div>
+    
+    <!-- === 第二页：祝福页面 === -->
+    <div class="page page-2" id="page2">
+        <button class="back-btn" onclick="goBack()">← 返回</button>
+        
+        <div class="container">
+            <div class="header">
+                <div class="date" id="currentDate"></div>
+                <div class="emoji-title">🎆✨🎁</div>
+                <h1>元旦快乐！</h1>
+                <div class="year-number" id="currentYear"></div>
+            </div>
+            
+            <div class="message-box">
+                <p>亲爱的朋友：</p>
+                <p>新年的第一缕阳光，</p>
+                <p>带着我最诚挚的祝福，</p>
+                <p>轻轻来到你的身边。</p>
+                <br>
+                <div class="blessing">🎊 愿你所求皆如愿 🎊</div>
+                <div class="blessing">✨ 所行化坦途 ✨</div>
+                <div class="blessing">❤️ 多喜乐，长安宁 ❤️</div>
+            </div>
+            
+            <div class="signature">
+                <p>辞旧迎新，万象更新</p>
+                <p>愿美好常伴你左右</p>
+                <div class="final-emoji">🎉 🎊 🍾</div>
+                <p>新年进步，万事胜意！</p>
+            </div>
+            
+            <div class="share-hint">
+                点击右上角 ⋯ 分享这份祝福给朋友
+            </div>
+        </div>
+    </div>
+    
+    <!-- 背景装饰容器 -->
+    <div id="bg-decorations"></div>
+    
+    <script>
+        // 创建飘落的星星/雪花效果（第一页）
+        function createFallingItems() {
+            const container = document.getElementById('bg-decorations');
+            const items = ['✨', '❄️', '⭐', '🌟', '💫'];
+            
+            for (let i = 0; i < 15; i++) {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                item.textContent = items[Math.floor(Math.random() * items.length)];
+                item.style.left = Math.random() * 100 + '%';
+                item.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                item.style.animationDelay = Math.random() * 5 + 's';
+                item.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                item.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(item);
+            }
+        }
+        
+        // 创建背景装饰（第二页）
+        function createBackgroundDecorations() {
+            const container = document.getElementById('bg-decorations');
+            container.innerHTML = '';
+            
+            const emojis = ['🎉', '✨', '🎁', '🎊', '❤️', '🌟', '🎈', '🍾'];
+            
+            for (let i = 0; i < 20; i++) {
+                const deco = document.createElement('div');
+                deco.className = 'bg-decoration';
+                deco.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                deco.style.left = Math.random() * 100 + '%';
+                deco.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                deco.style.animationDelay = Math.random() * 5 + 's';
+                deco.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                deco.style.opacity = Math.random() * 0.15 + 0.1;
+                container.appendChild(deco);
+            }
+        }
+        
+        // 打开信封（切换到第二页）
+        function openEnvelope() {
+            console.log("打开信封函数被调用");
+            
+            // 添加打开动画效果
+            const envelope = document.querySelector('.envelope');
+            const btn = document.querySelector('.open-btn');
+            
+            // 信封动画
+            envelope.style.animation = 'none';
+            envelope.style.transform = 'scale(1.2) rotate(10deg)';
+            
+            // 按钮动画
+            btn.style.transform = 'scale(0.95)';
+            btn.innerHTML = '<span>🎁 正在打开...</span>';
+            btn.disabled = true;
+            
+            // 短暂延迟后切换页面
+            setTimeout(() => {
+                console.log("切换到第二页");
+                
+                // 隐藏第一页
+                document.getElementById('page1').classList.add('hidden');
+                
+                // 显示第二页
+                document.getElementById('page2').classList.add('show');
+                
+                // 设置日期和年份
+                const now = new Date();
+                document.getElementById('currentYear').textContent = now.getFullYear();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('currentDate').textContent = 
+                    now.toLocaleDateString('zh-CN', options);
+                
+                // 创建第二页的装饰
+                createBackgroundDecorations();
+                
+                // 添加页面切换音效
+                playPageTransitionSound();
+                
+            }, 800);
+        }
+        
+        // 返回第一页
+        function goBack() {
+            console.log("返回第一页");
+            
+            // 隐藏第二页
+            document.getElementById('page2').classList.remove('show');
+            
+            // 显示第一页
+            document.getElementById('page1').classList.remove('hidden');
+            
+            // 重新创建飘落效果
+            createFallingItems();
+            
+            // 重置按钮状态
+            const btn = document.querySelector('.open-btn');
+            btn.innerHTML = '<span>✨ 打开祝福 ✨</span>';
+            btn.style.transform = '';
+            btn.disabled = false;
+            
+            // 重置信封
+            const envelope = document.querySelector('.envelope');
+            envelope.style.animation = 'floatEnvelope 3s infinite ease-in-out';
+            envelope.style.transform = '';
+        }
+        
+        // 模拟页面切换音效
+        function playPageTransitionSound() {
+            try {
+                // 创建简单的哔声
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 523.25; // C5
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                // 静默失败
+                console.log("音效不可用");
+            }
+        }
+        
+        // 点击页面添加特效（第二页）
+        document.addEventListener('click', function(e) {
+            // 检查是否在第二页
+            if (document.getElementById('page2').classList.contains('show')) {
+                createClickEffect(e.clientX, e.clientY);
+            }
+        });
+        
+        // 创建点击特效
+        function createClickEffect(x, y) {
+            const effect = document.createElement('div');
+            effect.style.position = 'fixed';
+            effect.style.left = (x - 15) + 'px';
+            effect.style.top = (y - 15) + 'px';
+            effect.style.fontSize = '30px';
+            effect.style.pointerEvents = 'none';
+            effect.style.zIndex = '1000';
+            
+            const effects = ['✨', '🌟', '💥', '🎇', '🎆'];
+            effect.textContent = effects[Math.floor(Math.random() * effects.length)];
+            
+            // 添加动画
+            effect.style.animation = 'clickEffect 1s forwards';
+            
+            // 如果动画样式不存在，添加它
+            if (!document.querySelector('#clickEffectStyle')) {
+                const style = document.createElement('style');
+                style.id = 'clickEffectStyle';
+                style.textContent = `
+                    @keyframes clickEffect {
+                        0% {
+                            transform: scale(1) rotate(0deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(2) rotate(180deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(effect);
+            setTimeout(() => effect.remove(), 1000);
+        }
+        
+        // 页面加载初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("页面加载完成");
+            
+            // 创建第一页的飘落效果
+            createFallingItems();
+            
+            // 为打开按钮添加鼠标悬停效果
+            const openBtn = document.querySelector('.open-btn');
+            openBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            openBtn.addEventListener('mouseleave', function() {
+                if (!this.disabled) {
+                    this.style.transform = '';
+                }
+            });
+            
+            // 调试信息
+            console.log("第一页元素:", document.getElementById('page1'));
+            console.log("第二页元素:", document.getElementById('page2'));
+            console.log("打开按钮元素:", openBtn);
+        });
+    </script>
+</body>
+</html>
